@@ -1,10 +1,9 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/vasujain275/calculator-api-go/handlers"
 	"github.com/vasujain275/calculator-api-go/logger"
+	"net/http"
 )
 
 func main() {
@@ -15,6 +14,7 @@ func main() {
 	http.HandleFunc("/subtract", handlers.SubtractionHandler)
 	http.HandleFunc("/multiply", handlers.MultiplicationHandler)
 	http.HandleFunc("/divide", handlers.DivisionHandler)
+	http.HandleFunc("/sum", handlers.SumHandler)
 
 	fs := http.FileServer(http.Dir("./swagger-ui"))
 	http.Handle("/docs/", http.StripPrefix("/docs/", fs))
