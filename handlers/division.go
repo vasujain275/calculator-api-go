@@ -1,0 +1,32 @@
+package handlers
+
+import (
+	"encoding/json"
+	"github.com/vasujain275/calculator-api-go/logger"
+	"github.com/vasujain275/calculator-api-go/models"
+	"net/http"
+)
+
+func DivisionHandler(rw http.ResponseWriter, r *http.Request) {
+	var b models.RequestBody
+
+	err := json.NewDecoder(r.Body).Decode(&b)
+
+	if err != nil {
+		logger.Log.Debug(err.Error())
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+	}
+
+	if b.Number2 == 0 {
+		logger.Log.Debug(err.Error())
+		http.Error(rw, "Can't Divide by Zero", http.StatusBadRequest)
+		return
+	}
+
+	result := models.Result{
+		Result: b.Number1 / b.Number2,
+	}
+
+	rw.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(rw).Encode(result)
+}

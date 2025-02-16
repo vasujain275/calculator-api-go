@@ -1,101 +1,22 @@
 package main
 
 import (
-	"encoding/json"
-	"log/slog"
 	"net/http"
-	"os"
+
+	"github.com/vasujain275/calculator-api-go/handlers"
+	"github.com/vasujain275/calculator-api-go/logger"
 )
 
-type RequestBody struct {
-	Number1 int `json:"number1"`
-	Number2 int `json:"number2"`
-}
-
-type Result struct {
-	Result int `json:"result"`
-}
-
 func main() {
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	logger.Log.Info("Starting the Http Server!.......")
 
-	logger.Info("Starting the Http Server!.......")
+	http.HandleFunc("/health", handlers.HealthHandler)
+	http.HandleFunc("/add", handlers.AdditionHandler)
+	http.HandleFunc("/subtract", handlers.SubtractionHandler)
+	http.HandleFunc("/multiply", handlers.MultiplicationHandler)
+	http.HandleFunc("/divide", handlers.DivisionHandler)
 
-	http.HandleFunc("/add", AdditionHandler)
-	http.HandleFunc("/subtract", SubtractionHandler)
-	http.HandleFunc("/multiply", MultiplicationHandler)
-	http.HandleFunc("/divide", DivisionHandler)
 	if err := http.ListenAndServe(":8080", nil); err != nil {
-		logger.Debug(err.Error())
+		logger.Log.Debug(err.Error())
 	}
-}
-
-func AdditionHandler(rw http.ResponseWriter, r *http.Request) {
-	var b RequestBody
-
-	err := json.NewDecoder(r.Body).Decode(&b)
-
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusBadRequest)
-	}
-
-	result := Result{
-		Result: b.Number1 + b.Number2,
-	}
-
-	rw.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(rw).Encode(result)
-
-	return
-}
-
-func SubtractionHandler(rw http.ResponseWriter, r *http.Request) {
-	var b RequestBody
-
-	err := json.NewDecoder(r.Body).Decode(&b)
-
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusBadRequest)
-	}
-
-	result := Result{
-		Result: b.Number1 - b.Number2,
-	}
-
-	rw.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(rw).Encode(result)
-}
-
-func MultiplicationHandler(rw http.ResponseWriter, r *http.Request) {
-	var b RequestBody
-
-	err := json.NewDecoder(r.Body).Decode(&b)
-
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusBadRequest)
-	}
-
-	result := Result{
-		Result: b.Number1 * b.Number2,
-	}
-
-	rw.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(rw).Encode(result)
-}
-
-func DivisionHandler(rw http.ResponseWriter, r *http.Request) {
-	var b RequestBody
-
-	err := json.NewDecoder(r.Body).Decode(&b)
-
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusBadRequest)
-	}
-
-	result := Result{
-		Result: b.Number1 / b.Number2,
-	}
-
-	rw.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(rw).Encode(result)
 }
