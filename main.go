@@ -16,6 +16,9 @@ func main() {
 	http.HandleFunc("/multiply", handlers.MultiplicationHandler)
 	http.HandleFunc("/divide", handlers.DivisionHandler)
 
+	fs := http.FileServer(http.Dir("./swagger-ui"))
+	http.Handle("/docs/", http.StripPrefix("/docs/", fs))
+
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		logger.Log.Debug(err.Error())
 	}
