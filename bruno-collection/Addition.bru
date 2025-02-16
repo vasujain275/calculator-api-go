@@ -1,0 +1,18 @@
+meta {
+  name: Addition
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base}}/add
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "number1":8,
+    "number2":9
+  }
+}

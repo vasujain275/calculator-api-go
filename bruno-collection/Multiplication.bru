@@ -1,0 +1,18 @@
+meta {
+  name: Multiplication
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base}}/multiply
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "number1":8,
+    "number2":9
+  }
+}
